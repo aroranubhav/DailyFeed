@@ -2,8 +2,11 @@ package com.maxi.dailyfeed.framework.di.module
 
 import android.content.Context
 import android.util.Base64
+import androidx.room.Room
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.maxi.dailyfeed.BuildConfig
+import com.maxi.dailyfeed.data.source.local.NewsDatabase
+import com.maxi.dailyfeed.data.source.local.dao.NewsDao
 import com.maxi.dailyfeed.data.source.remote.api.NetworkApiService
 import com.maxi.dailyfeed.data.source.remote.interceptor.AuthorizationInterceptor
 import com.maxi.dailyfeed.data.source.remote.interceptor.CacheControlInterceptor
@@ -32,6 +35,7 @@ import javax.inject.Singleton
 object AppModule {
 
     private const val NEWS_CACHE = "news_cache"
+    private const val NEWS_DATABASE = "news"
 
     @Provides
     @BaseUrl
@@ -153,4 +157,23 @@ object AppModule {
         retrofit: Retrofit
     ): NetworkApiService =
         retrofit.create(NetworkApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNewsDatabase(
+        @ApplicationContext context: Context
+    ): NewsDatabase =
+        Room
+            .databaseBuilder(
+                context,
+                NewsDatabase::class.java,
+                NEWS_DATABASE
+            ).build()
+
+    @Provides
+    @Singleton
+    fun provideNewsDao(
+        database: NewsDatabase
+    ): NewsDao =
+        database.newsDao()
 }
