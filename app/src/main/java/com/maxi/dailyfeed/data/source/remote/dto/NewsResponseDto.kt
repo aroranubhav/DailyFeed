@@ -1,6 +1,6 @@
 package com.maxi.dailyfeed.data.source.remote.dto
 
-import com.maxi.dailyfeed.data.source.common.DataConstants.Keys as Keys
+import com.maxi.dailyfeed.data.common.DataConstants.Keys as Keys
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

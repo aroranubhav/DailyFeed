@@ -2,7 +2,7 @@ package com.maxi.dailyfeed.data.source.remote.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import com.maxi.dailyfeed.data.source.common.DataConstants.Headers as Headers
+import com.maxi.dailyfeed.data.common.DataConstants.Headers as Headers
 
 class AuthorizationInterceptor(
     private val apiKey: String,
