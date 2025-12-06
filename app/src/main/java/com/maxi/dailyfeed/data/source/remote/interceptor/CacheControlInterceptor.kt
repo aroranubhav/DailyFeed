@@ -1,6 +1,6 @@
 package com.maxi.dailyfeed.data.source.remote.interceptor
 
-import com.maxi.dailyfeed.data.source.common.DataConstants.Headers.X_FORCE_REFRESH
+import com.maxi.dailyfeed.data.common.DataConstants.Headers.X_FORCE_REFRESH
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.Response

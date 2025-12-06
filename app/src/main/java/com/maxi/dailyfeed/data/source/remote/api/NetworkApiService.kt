@@ -1,8 +1,8 @@
 package com.maxi.dailyfeed.data.source.remote.api
 
-import com.maxi.dailyfeed.data.source.common.DataConstants.EndPoints.TOP_HEADLINES
-import com.maxi.dailyfeed.data.source.common.DataConstants.Headers.X_FORCE_REFRESH
-import com.maxi.dailyfeed.data.source.common.DataConstants.QueryParams
+import com.maxi.dailyfeed.data.common.DataConstants.EndPoints.TOP_HEADLINES
+import com.maxi.dailyfeed.data.common.DataConstants.Headers.X_FORCE_REFRESH
+import com.maxi.dailyfeed.data.common.DataConstants.QueryParams
 import com.maxi.dailyfeed.data.source.remote.dto.NewsResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Header

@@ -1,12 +1,12 @@
-package com.maxi.dailyfeed.data.source.common
+package com.maxi.dailyfeed.data.common
 
-class NotFoundException(
+class ForbiddenException(
     errorMessage: String? = null,
     errorBody: String? = null,
     requestMethod: String? = null,
     requestUrl: String? = null
 ) : ApiException(
-    404,
+    403,
     errorMessage,
     errorBody,
     requestMethod,

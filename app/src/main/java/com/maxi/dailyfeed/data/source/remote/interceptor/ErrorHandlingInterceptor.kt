@@ -1,10 +1,10 @@
 package com.maxi.dailyfeed.data.source.remote.interceptor
 
-import com.maxi.dailyfeed.data.source.common.ApiException
-import com.maxi.dailyfeed.data.source.common.ForbiddenException
-import com.maxi.dailyfeed.data.source.common.InternalServerException
-import com.maxi.dailyfeed.data.source.common.NotFoundException
-import com.maxi.dailyfeed.data.source.common.UnauthorizedException
+import com.maxi.dailyfeed.data.common.ApiException
+import com.maxi.dailyfeed.data.common.ForbiddenException
+import com.maxi.dailyfeed.data.common.InternalServerException
+import com.maxi.dailyfeed.data.common.NotFoundException
+import com.maxi.dailyfeed.data.common.UnauthorizedException
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor

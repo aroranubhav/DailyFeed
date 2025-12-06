@@ -1,12 +1,12 @@
-package com.maxi.dailyfeed.data.source.common
+package com.maxi.dailyfeed.data.common
 
-class UnauthorizedException(
+class NotFoundException(
     errorMessage: String? = null,
     errorBody: String? = null,
     requestMethod: String? = null,
     requestUrl: String? = null
 ) : ApiException(
-    401,
+    404,
     errorMessage,
     errorBody,
     requestMethod,

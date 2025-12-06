@@ -2,7 +2,7 @@ package com.maxi.dailyfeed.data.source.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import com.maxi.dailyfeed.data.source.common.DataConstants.Keys as Keys
+import com.maxi.dailyfeed.data.common.DataConstants.Keys as Keys
 
 @Serializable
 data class ArticleDto(

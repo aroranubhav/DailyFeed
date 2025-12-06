@@ -3,8 +3,8 @@ package com.maxi.dailyfeed.data.source.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.maxi.dailyfeed.data.source.common.DataConstants.Keys as Keys
-import com.maxi.dailyfeed.data.source.common.DataConstants.Tables.ARTICLES
+import com.maxi.dailyfeed.data.common.DataConstants.Keys as Keys
+import com.maxi.dailyfeed.data.common.DataConstants.Tables.ARTICLES
 
 @Entity(tableName = ARTICLES)
 data class ArticleEntity(

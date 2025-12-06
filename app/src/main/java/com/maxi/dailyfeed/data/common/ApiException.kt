@@ -1,4 +1,4 @@
-package com.maxi.dailyfeed.data.source.common
+package com.maxi.dailyfeed.data.common
 
 import java.io.IOException
 
