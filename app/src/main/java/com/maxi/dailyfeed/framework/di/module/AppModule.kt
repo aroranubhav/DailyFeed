@@ -121,7 +121,7 @@ object AppModule {
         OkHttpClient()
             .newBuilder()
             .cache(cache)
-            .connectTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(authorizationInterceptor)
