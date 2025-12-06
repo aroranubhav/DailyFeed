@@ -1,12 +1,12 @@
-package com.maxi.dailyfeed.data.source.common
+package com.maxi.dailyfeed.data.common
 
-class ForbiddenException(
+class UnauthorizedException(
     errorMessage: String? = null,
     errorBody: String? = null,
     requestMethod: String? = null,
     requestUrl: String? = null
 ) : ApiException(
-    403,
+    401,
     errorMessage,
     errorBody,
     requestMethod,
