@@ -30,4 +30,9 @@ object DataConstants {
         const val USER_AGENT = "User-Agent"
         const val X_FORCE_REFRESH = "X-Force-Refresh"
     }
+
+    object Tables {
+
+        const val ARTICLES = "articles"
+    }
 }
