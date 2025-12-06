@@ -1,4 +1,4 @@
-package com.maxi.dailyfeed.data.source.common
+package com.maxi.dailyfeed.data.common
 
 import androidx.sqlite.SQLiteException
 import com.maxi.dailyfeed.common.ErrorType
