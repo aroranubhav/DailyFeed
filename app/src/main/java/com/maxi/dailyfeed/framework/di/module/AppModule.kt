@@ -5,6 +5,10 @@ import android.util.Base64
 import androidx.room.Room
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.maxi.dailyfeed.BuildConfig
+import com.maxi.dailyfeed.common.DefaultDispatcherProvider
+import com.maxi.dailyfeed.common.DefaultNetworkConnectivityHelper
+import com.maxi.dailyfeed.common.DispatcherProvider
+import com.maxi.dailyfeed.common.NetworkConnectivityHelper
 import com.maxi.dailyfeed.data.source.local.NewsDatabase
 import com.maxi.dailyfeed.data.source.local.dao.NewsDao
 import com.maxi.dailyfeed.data.source.remote.api.NetworkApiService
@@ -176,4 +180,17 @@ object AppModule {
         database: NewsDatabase
     ): NewsDao =
         database.newsDao()
+
+    @Provides
+    @Singleton
+    fun provideDispatcherProvider():
+            DispatcherProvider =
+        DefaultDispatcherProvider()
+
+    @Provides
+    @Singleton
+    fun provideNetworkConnectivityHelper(
+        @ApplicationContext context: Context
+    ): NetworkConnectivityHelper =
+        DefaultNetworkConnectivityHelper(context)
 }
