@@ -9,6 +9,8 @@ import com.maxi.dailyfeed.common.Constants.COUNTRY
 import com.maxi.dailyfeed.common.Constants.LANGUAGE
 import com.maxi.dailyfeed.common.ErrorType
 import com.maxi.dailyfeed.common.Resource
+import com.maxi.dailyfeed.data.source.local.dao.NewsDao
+import com.maxi.dailyfeed.data.source.local.entity.NewsWorkerLogEntity
 import com.maxi.dailyfeed.domain.usecase.refresh_news.RefreshNewsUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -18,16 +20,18 @@ import kotlinx.coroutines.CancellationException
 class NewsWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted private val params: WorkerParameters,
-    private val refreshNews: RefreshNewsUseCase
+    private val refreshNews: RefreshNewsUseCase,
+    private val dao: NewsDao
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         return try {
             val language = inputData.getString(LANGUAGE) ?: "en"
             val country = inputData.getString(COUNTRY) ?: "us"
-
+            Log.d(TAG, "doWork: called!")
             when (val response = refreshNews.refreshNews(language, country)) {
                 is Resource.Success -> {
+                    insertWorkStatusInDb(WorkStatus.SUCCESS)
                     Result.success()
                 }
 
@@ -38,34 +42,82 @@ class NewsWorker @AssistedInject constructor(
                         // Transient/Retriable Errors
                         ErrorType.IO,
                         ErrorType.DATABASE -> {
+                            insertWorkStatusInDb(WorkStatus.RETRY)
                             Result.retry()
                         }
 
                         ErrorType.API -> {
                             when (response.errorCode) {
-                                in 500..599, 429 -> Result.retry() // Transient/Retriable Errors
-                                in 400..499 -> Result.failure() // Non-Transient/Non-Retriable Errors
-                                else -> Result.failure()
+                                in 500..599, 429 -> { // Transient/Retriable Errors
+                                    insertWorkStatusInDb(WorkStatus.RETRY)
+                                    Result.retry()
+                                }
+
+                                in 400..499 -> { // Non-Transient/Non-Retriable Errors
+                                    insertWorkStatusInDb(
+                                        WorkStatus.FAILURE,
+                                        response.errorMessage
+                                    )
+                                    Result.failure()
+                                }
+
+                                else -> {
+                                    insertWorkStatusInDb(
+                                        WorkStatus.FAILURE,
+                                        response.errorMessage
+                                    )
+                                    Result.success()
+                                }
                             }
                         }
 
                         ErrorType.UNAUTHORISED,
                         ErrorType.UNKNOWN -> {
-                            Result.failure()
+                            insertWorkStatusInDb(
+                                WorkStatus.FAILURE,
+                                response.errorMessage
+                            )
+                            Result.success()
                         }
                     }
                 }
 
                 is Resource.Loading -> {
+                    insertWorkStatusInDb(
+                        WorkStatus.RETRY,
+                        "Invalid loading state!"
+                    )
                     Result.failure() //safe api call never returns loading!
                 }
             }
         } catch (ce: CancellationException) {
+            insertWorkStatusInDb(
+                WorkStatus.RETRY,
+                ce.message
+            )
             Result.failure()
             throw ce
         } catch (t: Throwable) {
-            Result.failure()
+            insertWorkStatusInDb(
+                WorkStatus.FAILURE,
+                t.message
+            )
+            Result.success()
         }
+    }
+
+    private suspend fun insertWorkStatusInDb(
+        status: WorkStatus,
+        message: String? = null
+    ) {
+        dao.insertWorkerEntry(
+            NewsWorkerLogEntity(
+                0,
+                System.currentTimeMillis(),
+                status.name,
+                message
+            )
+        )
     }
 
     private fun logError(
@@ -74,6 +126,12 @@ class NewsWorker @AssistedInject constructor(
     ) {
         Log.e(TAG, "Error while running scheduled task! $type -- $message")
     }
+}
+
+enum class WorkStatus {
+    SUCCESS,
+    FAILURE,
+    RETRY
 }
 
 private const val TAG = "NewsWorkerTAG"
