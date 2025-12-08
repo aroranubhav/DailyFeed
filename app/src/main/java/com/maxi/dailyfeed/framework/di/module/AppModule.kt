@@ -10,8 +10,10 @@ import com.maxi.dailyfeed.common.DefaultDispatcherProvider
 import com.maxi.dailyfeed.common.DefaultNetworkConnectivityHelper
 import com.maxi.dailyfeed.common.DispatcherProvider
 import com.maxi.dailyfeed.common.NetworkConnectivityHelper
-import com.maxi.dailyfeed.data.source.local.NewsDatabase
+import com.maxi.dailyfeed.data.source.local.db.NewsDatabase
 import com.maxi.dailyfeed.data.source.local.dao.NewsDao
+import com.maxi.dailyfeed.data.source.local.dao.NewsWorkerDao
+import com.maxi.dailyfeed.data.source.local.db.MIGRATION_1_2
 import com.maxi.dailyfeed.data.source.remote.api.NetworkApiService
 import com.maxi.dailyfeed.data.source.remote.interceptor.AuthorizationInterceptor
 import com.maxi.dailyfeed.data.source.remote.interceptor.CacheControlInterceptor
@@ -173,7 +175,8 @@ object AppModule {
                 context,
                 NewsDatabase::class.java,
                 NEWS_DATABASE
-            ).build()
+            ).addMigrations(MIGRATION_1_2)
+            .build()
 
     @Provides
     @Singleton
@@ -181,6 +184,13 @@ object AppModule {
         database: NewsDatabase
     ): NewsDao =
         database.newsDao()
+
+    @Provides
+    @Singleton
+    fun provideNewsWorkerDao(
+        database: NewsDatabase
+    ): NewsWorkerDao =
+        database.newsWorkerDao()
 
     @Provides
     @Singleton
