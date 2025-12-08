@@ -3,6 +3,7 @@ package com.maxi.dailyfeed.framework.di.module
 import android.content.Context
 import android.util.Base64
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.maxi.dailyfeed.BuildConfig
 import com.maxi.dailyfeed.common.DefaultDispatcherProvider
@@ -180,6 +181,13 @@ object AppModule {
         database: NewsDatabase
     ): NewsDao =
         database.newsDao()
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(
+        @ApplicationContext context: Context
+    ): WorkManager =
+        WorkManager.getInstance(context)
 
     @Provides
     @Singleton
