@@ -45,7 +45,7 @@ object AppModule {
     @BaseUrl
     fun provideBaseUrl():
             String =
-        "https://www.newsapi.org/v2/"
+        "https://newsapi.org/v2/"
 
     @Provides
     @ApiKey
