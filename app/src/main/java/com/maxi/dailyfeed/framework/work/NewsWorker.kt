@@ -9,7 +9,7 @@ import com.maxi.dailyfeed.common.Constants.COUNTRY
 import com.maxi.dailyfeed.common.Constants.LANGUAGE
 import com.maxi.dailyfeed.common.ErrorType
 import com.maxi.dailyfeed.common.Resource
-import com.maxi.dailyfeed.data.source.local.dao.NewsDao
+import com.maxi.dailyfeed.data.source.local.dao.NewsWorkerDao
 import com.maxi.dailyfeed.data.source.local.entity.NewsWorkerLogEntity
 import com.maxi.dailyfeed.domain.usecase.refresh_news.RefreshNewsUseCase
 import dagger.assisted.Assisted
@@ -21,7 +21,7 @@ class NewsWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted private val params: WorkerParameters,
     private val refreshNews: RefreshNewsUseCase,
-    private val dao: NewsDao
+    private val dao: NewsWorkerDao
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
@@ -110,7 +110,7 @@ class NewsWorker @AssistedInject constructor(
         status: WorkStatus,
         message: String? = null
     ) {
-        dao.insertWorkerEntry(
+        dao.insertNewsWorkerLog(
             NewsWorkerLogEntity(
                 0,
                 System.currentTimeMillis(),
