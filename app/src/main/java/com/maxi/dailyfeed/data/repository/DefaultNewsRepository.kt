@@ -56,8 +56,8 @@ class DefaultNewsRepository @Inject constructor(
 
                     is Resource.Error -> {
                         Resource.Error(
-                            dbResponse.type,
-                            dbResponse.message
+                            dbResponse.errorType,
+                            dbResponse.errorMessage
                         )
                     }
 
@@ -69,8 +69,9 @@ class DefaultNewsRepository @Inject constructor(
 
             is Resource.Error -> {
                 Resource.Error(
-                    apiResponse.type,
-                    apiResponse.message
+                    apiResponse.errorType,
+                    apiResponse.errorMessage,
+                    apiResponse.errorCode
                 )
             }
 

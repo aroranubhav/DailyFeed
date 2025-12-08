@@ -2,6 +2,7 @@ package com.maxi.dailyfeed.presentation.news.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.maxi.dailyfeed.common.DispatcherProvider
 import com.maxi.dailyfeed.common.ErrorType
 import com.maxi.dailyfeed.common.NetworkConnectivityHelper
@@ -58,7 +59,7 @@ class NewsViewModel @Inject constructor(
                     }
 
                     is Resource.Error -> {
-                        emitUiEvent(UiEvent.Error(mapErrorToMessage(result.type)))
+                        emitUiEvent(UiEvent.Error(mapErrorToMessage(result.errorType)))
                     }
                 }
             }
@@ -84,7 +85,7 @@ class NewsViewModel @Inject constructor(
             emitUiEvent(UiEvent.RefreshStarted)
             val response = refreshNews.refreshNews("en", "us")
             if (response is Resource.Error) {
-                emitUiEvent(UiEvent.Error(mapErrorToMessage(response.type)))
+                emitUiEvent(UiEvent.Error(mapErrorToMessage(response.errorType)))
             } else {
                 dataStore.updateIsAlreadyLaunched()
             }

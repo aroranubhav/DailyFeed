@@ -19,7 +19,8 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): Resource<T> {
         }
         Resource.Error(
             errorType,
-            e.errorMessage
+            e.errorMessage,
+            e.errorCode
         )
     } catch (e: IOException) {
         Resource.Error(
