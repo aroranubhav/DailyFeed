@@ -5,12 +5,15 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.maxi.dailyfeed.data.source.local.entity.ArticleEntity
+import com.maxi.dailyfeed.data.source.local.entity.NewsWorkerLogEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(
+        onConflict = OnConflictStrategy.REPLACE
+    )
     suspend fun insertNews(articles: List<ArticleEntity>): List<Long>
 
     @Query(
@@ -21,6 +24,13 @@ interface NewsDao {
     )
     fun getNews(): Flow<List<ArticleEntity>>
 
-    @Query("DELETE FROM articles")
+    @Query(
+        "DELETE FROM articles"
+    )
     suspend fun clearNews()
+
+    @Insert(
+        onConflict = OnConflictStrategy.REPLACE
+    )
+    suspend fun insertWorkerEntry(entry: NewsWorkerLogEntity): Long
 }
