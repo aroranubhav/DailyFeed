@@ -3,8 +3,8 @@ package com.maxi.dailyfeed.data.repository
 import com.maxi.dailyfeed.common.Resource
 import com.maxi.dailyfeed.data.mapper.toDomainList
 import com.maxi.dailyfeed.data.mapper.toEntityList
-import com.maxi.dailyfeed.data.source.common.safeApiCall
-import com.maxi.dailyfeed.data.source.common.safeDbCall
+import com.maxi.dailyfeed.data.common.safeApiCall
+import com.maxi.dailyfeed.data.common.safeDbCall
 import com.maxi.dailyfeed.data.source.local.LocalDataSource
 import com.maxi.dailyfeed.data.source.remote.RemoteDataSource
 import com.maxi.dailyfeed.domain.model.Article
