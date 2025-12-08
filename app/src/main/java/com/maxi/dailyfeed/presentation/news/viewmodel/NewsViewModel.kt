@@ -22,9 +22,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @HiltViewModel
-class NewsViewModel(
+class NewsViewModel @Inject constructor(
     private val dataStore: AppDataStore,
     private val getNews: GetNewsUseCase,
     private val refreshNews: RefreshNewsUseCase,
@@ -84,6 +85,8 @@ class NewsViewModel(
             val response = refreshNews.refreshNews("en", "us")
             if (response is Resource.Error) {
                 emitUiEvent(UiEvent.Error(mapErrorToMessage(response.type)))
+            } else {
+                dataStore.updateIsAlreadyLaunched()
             }
             emitUiEvent(UiEvent.RefreshComplete)
         }
