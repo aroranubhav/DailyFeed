@@ -34,5 +34,6 @@ object DataConstants {
     object Tables {
 
         const val ARTICLES = "articles"
+        const val NEWS_WORKER_LOGS = "news_worker_logs"
     }
 }
