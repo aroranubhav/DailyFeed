@@ -80,7 +80,7 @@ class NewsViewModel @Inject constructor(
         }
     }
 
-    private fun refreshNews() {
+    fun refreshNews() {
         viewModelScope.launch(dispatchers.io) {
             emitUiEvent(UiEvent.RefreshStarted)
             val response = refreshNews.refreshNews("en", "us")
