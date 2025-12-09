@@ -67,16 +67,21 @@ class NewsActivity : AppCompatActivity() {
     }
 
     private fun setupUi() {
-        binding.rvNews.apply {
-            layoutManager = LinearLayoutManager(this@NewsActivity)
-            adapter = this@NewsActivity.adapter
-            setHasFixedSize(true)
-            addItemDecoration(
-                DividerItemDecoration(
-                    this@NewsActivity,
-                    (layoutManager as LinearLayoutManager).orientation
+        binding.apply {
+            rvNews.apply {
+                layoutManager = LinearLayoutManager(this@NewsActivity)
+                adapter = this@NewsActivity.adapter
+                setHasFixedSize(true)
+                addItemDecoration(
+                    DividerItemDecoration(
+                        this@NewsActivity,
+                        (layoutManager as LinearLayoutManager).orientation
+                    )
                 )
-            )
+            }
+            srlMain.setOnRefreshListener {
+                viewModel.refreshNews()
+            }
         }
     }
 
@@ -114,6 +119,7 @@ class NewsActivity : AppCompatActivity() {
 
                             is UiEvent.RefreshComplete -> {
                                 Log.d(TAG, "observeDataAndUpdateUi: RefreshCompleted Event!")
+                                binding.srlMain.isRefreshing = false
                             }
                         }
                     }
