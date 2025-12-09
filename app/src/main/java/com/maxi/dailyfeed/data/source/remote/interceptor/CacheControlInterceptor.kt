@@ -14,26 +14,20 @@ class CacheControlInterceptor : Interceptor {
         val forceRefreshHeader = request.header(X_FORCE_REFRESH) == "true"
 
         return if (request.method == "GET") {
-            val modifiedRequest = when {
-                forceRefreshHeader -> {
-                    request
-                        .newBuilder()
-                        .removeHeader(X_FORCE_REFRESH)
-                        .cacheControl(CacheControl.FORCE_NETWORK)
-                        .build()
-                }
+            val builder = request.newBuilder().removeHeader(X_FORCE_REFRESH)
 
-                else -> {
-                    request
-                        .newBuilder()
-                        .cacheControl(
-                            CacheControl.Builder()
-                                .maxAge(2, TimeUnit.MINUTES)
-                                .build()
-                        )
-                        .build()
+            val modifiedRequest = builder.apply {
+                if (forceRefreshHeader) {
+                    cacheControl(CacheControl.FORCE_NETWORK)
+                } else {
+                    cacheControl(
+                        CacheControl.Builder()
+                            .maxAge(2, TimeUnit.MINUTES)
+                            .build()
+                    )
                 }
-            }
+            }.build()
+
             chain.proceed(modifiedRequest)
         } else {
             chain.proceed(request)
