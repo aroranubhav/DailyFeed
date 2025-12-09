@@ -1,11 +1,18 @@
 package com.maxi.dailyfeed.presentation.news.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,6 +32,23 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
 
+    private val requestNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                Toast.makeText(
+                    this, "Notifications enabled",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            } else {
+                Toast.makeText(
+                    this, "Notifications disabled",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
+
     private lateinit var binding: ActivityNewsBinding
 
     @Inject
@@ -39,6 +63,7 @@ class NewsActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupUi()
         observeDataAndUpdateUi()
+        askNotificationPermission()
     }
 
     private fun setupUi() {
@@ -92,6 +117,41 @@ class NewsActivity : AppCompatActivity() {
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    Log.d(TAG, "Permission already granted!")
+                }
+
+                shouldShowRequestPermissionRationale(
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("Notification Permission Required")
+                        .setMessage("We send updates when news is refreshed.")
+                        .setPositiveButton("Allow") { _, _ ->
+                            requestNotificationPermission.launch(
+                                Manifest.permission.POST_NOTIFICATIONS
+                            )
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                }
+
+                else -> {
+                    // Directly ask for permission
+                    requestNotificationPermission.launch(
+                        Manifest.permission.POST_NOTIFICATIONS
+                    )
                 }
             }
         }
