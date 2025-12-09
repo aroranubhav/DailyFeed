@@ -12,6 +12,7 @@ import com.maxi.dailyfeed.common.Resource
 import com.maxi.dailyfeed.data.source.local.dao.NewsWorkerDao
 import com.maxi.dailyfeed.data.source.local.entity.NewsWorkerLogEntity
 import com.maxi.dailyfeed.domain.usecase.refresh_news.RefreshNewsUseCase
+import com.maxi.dailyfeed.framework.notification.RefreshNotificationHelper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
@@ -21,7 +22,8 @@ class NewsWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted private val params: WorkerParameters,
     private val refreshNews: RefreshNewsUseCase,
-    private val dao: NewsWorkerDao
+    private val dao: NewsWorkerDao,
+    private val notificationHelper: RefreshNotificationHelper
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
@@ -32,6 +34,7 @@ class NewsWorker @AssistedInject constructor(
             when (val response = refreshNews.refreshNews(language, country)) {
                 is Resource.Success -> {
                     insertWorkStatusInDb(WorkStatus.SUCCESS)
+                    notificationHelper.showNewsRefreshedNotification()
                     Result.success()
                 }
 
