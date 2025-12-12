@@ -17,8 +17,10 @@ import com.maxi.dailyfeed.data.source.local.db.MIGRATION_1_2
 import com.maxi.dailyfeed.data.source.remote.api.NetworkApiService
 import com.maxi.dailyfeed.data.source.remote.interceptor.AuthorizationInterceptor
 import com.maxi.dailyfeed.data.source.remote.interceptor.CacheControlInterceptor
+import com.maxi.dailyfeed.data.source.remote.interceptor.ETagInterceptor
 import com.maxi.dailyfeed.data.source.remote.interceptor.ErrorHandlingInterceptor
 import com.maxi.dailyfeed.data.source.remote.interceptor.LoggingInterceptor
+import com.maxi.dailyfeed.domain.repository.AppDataStore
 import com.maxi.dailyfeed.framework.di.qualifier.ApiKey
 import com.maxi.dailyfeed.framework.di.qualifier.BaseUrl
 import com.maxi.dailyfeed.framework.di.qualifier.IsDebug
@@ -109,6 +111,13 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideETagInterceptor(
+        dataStore: AppDataStore
+    ): ETagInterceptor =
+        ETagInterceptor(dataStore)
+
+    @Provides
+    @Singleton
     fun provideCache(
         @ApplicationContext context: Context
     ): Cache =
@@ -125,9 +134,10 @@ object AppModule {
     fun httpClient(
         cache: Cache,
         authorizationInterceptor: AuthorizationInterceptor,
-        cacheControlInterceptor: CacheControlInterceptor,
         errorHandlingInterceptor: ErrorHandlingInterceptor,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        eTagInterceptor: ETagInterceptor,
+        cacheControlInterceptor: CacheControlInterceptor,
     ): OkHttpClient =
         OkHttpClient()
             .newBuilder()
@@ -136,9 +146,10 @@ object AppModule {
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(authorizationInterceptor)
-            .addInterceptor(cacheControlInterceptor)
             .addInterceptor(errorHandlingInterceptor)
-            .addInterceptor(loggingInterceptor)
+            .addNetworkInterceptor(eTagInterceptor)
+            .addNetworkInterceptor(cacheControlInterceptor)
+            .addNetworkInterceptor(loggingInterceptor)
             .build()
 
     @Provides
