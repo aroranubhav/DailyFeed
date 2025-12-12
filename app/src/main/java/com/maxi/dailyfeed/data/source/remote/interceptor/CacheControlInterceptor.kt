@@ -9,14 +9,18 @@ import java.util.concurrent.TimeUnit
 class CacheControlInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
+        val originalRequest = chain.request()
 
-        val forceRefreshHeader = request.header(X_FORCE_REFRESH) == "true"
+        if (originalRequest.method != "GET") {
+            return chain.proceed(originalRequest)
+        }
 
-        return if (request.method == "GET") {
-            val builder = request.newBuilder().removeHeader(X_FORCE_REFRESH)
+        val forceRefreshHeader = originalRequest.header(X_FORCE_REFRESH) == "true"
 
-            val modifiedRequest = builder.apply {
+        val modifiedRequest = originalRequest
+            .newBuilder()
+            .removeHeader(X_FORCE_REFRESH)
+            .apply {
                 if (forceRefreshHeader) {
                     cacheControl(CacheControl.FORCE_NETWORK)
                 } else {
@@ -26,11 +30,17 @@ class CacheControlInterceptor : Interceptor {
                             .build()
                     )
                 }
-            }.build()
+            }
+            .build()
 
-            chain.proceed(modifiedRequest)
-        } else {
-            chain.proceed(request)
-        }
+        val networkResponse = chain.proceed(modifiedRequest)
+
+        return networkResponse
+            .newBuilder()
+            .removeHeader("Pragma")
+            .header(
+                "Cache-Control", "public, max-age=120"
+            )
+            .build()
     }
 }
