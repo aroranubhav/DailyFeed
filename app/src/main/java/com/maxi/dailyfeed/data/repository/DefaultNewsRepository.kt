@@ -1,5 +1,6 @@
 package com.maxi.dailyfeed.data.repository
 
+import com.maxi.dailyfeed.common.ErrorType
 import com.maxi.dailyfeed.common.Resource
 import com.maxi.dailyfeed.data.mapper.toDomainList
 import com.maxi.dailyfeed.data.mapper.toEntityList
@@ -42,28 +43,42 @@ class DefaultNewsRepository @Inject constructor(
             remote.getNews(language, country, forceRefresh)
         }) {
             is Resource.Success -> {
-                val articles = apiResponse.data.articles
+                val response = apiResponse.data
+                val code = response.code()
 
-                val dbResponse = safeDbCall {
-                    local.clearNews()
-                    local.insertNews(articles.toEntityList())
+                if (code == 304) {
+                    return Resource.Success(Unit)
                 }
 
-                when (dbResponse) {
-                    is Resource.Success -> {
-                        Resource.Success(Unit)
-                    }
+                if (!response.isSuccessful) {
+                    return Resource.Error(
+                        ErrorType.API,
+                        "HTTP $code",
+                        response.code()
+                    )
+                }
 
-                    is Resource.Error -> {
-                        Resource.Error(
-                            dbResponse.errorType,
-                            dbResponse.errorMessage
-                        )
-                    }
+                val responseBody = response.body() ?: return Resource.Error(
+                    ErrorType.API,
+                    "Empty response body!"
+                )
 
-                    is Resource.Loading -> {
-                        error("Unexpected Loading state inside refreshNews()")
-                    }
+                val articles = responseBody.articles
+                if (articles.isEmpty()) {
+                    return Resource.Success(Unit)
+                }
+
+                when (val dbResponse = safeDbCall {
+                    local.clearNews()
+                    local.insertNews(articles.toEntityList())
+                }) {
+                    is Resource.Success -> Resource.Success(Unit)
+                    is Resource.Error -> Resource.Error(
+                        dbResponse.errorType,
+                        dbResponse.errorMessage
+                    )
+
+                    is Resource.Loading -> error("Unexpected loading state!")
                 }
             }
 
@@ -76,7 +91,7 @@ class DefaultNewsRepository @Inject constructor(
             }
 
             is Resource.Loading -> {
-                error("Unexpected Loading state inside refreshNews()")
+                error("Unexpected loading state!")
             }
         }
     }
