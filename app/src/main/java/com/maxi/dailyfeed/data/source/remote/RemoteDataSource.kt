@@ -2,6 +2,7 @@ package com.maxi.dailyfeed.data.source.remote
 
 import com.maxi.dailyfeed.data.source.remote.api.NetworkApiService
 import com.maxi.dailyfeed.data.source.remote.dto.NewsResponseDto
+import retrofit2.Response
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(
@@ -12,7 +13,7 @@ class RemoteDataSource @Inject constructor(
         language: String,
         country: String,
         forceRefresh: Boolean
-    ): NewsResponseDto =
+    ): Response<NewsResponseDto> =
         service.getNews(language, country, forceRefresh)
 
 }

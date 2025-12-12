@@ -4,6 +4,7 @@ import com.maxi.dailyfeed.data.common.DataConstants.EndPoints.TOP_HEADLINES
 import com.maxi.dailyfeed.data.common.DataConstants.Headers.X_FORCE_REFRESH
 import com.maxi.dailyfeed.data.common.DataConstants.QueryParams
 import com.maxi.dailyfeed.data.source.remote.dto.NewsResponseDto
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
@@ -15,5 +16,5 @@ interface NetworkApiService {
         @Query(QueryParams.LANGUAGE) language: String,
         @Query(QueryParams.COUNTRY) country: String,
         @Header(X_FORCE_REFRESH) forceRefresh: Boolean = false
-    ): NewsResponseDto
+    ): Response<NewsResponseDto>
 }
