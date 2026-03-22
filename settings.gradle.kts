@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "DailyFeed"
 include(":app")
- 
+include(":domain")
+include(":common")
