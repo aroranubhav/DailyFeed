@@ -15,6 +15,7 @@ hilt = "2.59.2"
 room = "2.8.4"
 okHttp3 = "5.3.2"
 coil = "2.6.0"
+coroutines = "1.8.1"
 coroutinesTest = "1.10.2"
 turbine = "1.2.1"
 workManager = "2.11.1"
@@ -24,6 +25,7 @@ dataStore = "1.2.1"
 paging = "3.4.2"
 kotlinxSerialization = "1.7.3"
 kotlinxSerializationConverter = "1.0.0"
+javaxInject = "1"
 mockk = "1.14.9"
 squareMockWebServer = "5.3.2"
 hiltTesting = "2.59.2"
@@ -33,6 +35,7 @@ robolectric = "4.16.1"
 navigationCompose = "2.9.7"
 hiltNavigationCompose = "1.3.0"
 coroutinesGuava = "1.10.2"
+jetbrainsKotlinJvm = "2.2.10"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +52,7 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-foundaion = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "viewmodel" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
@@ -66,8 +70,7 @@ room-paging = { group = "androidx.room", name = "room-paging", version.ref = "ro
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttp3" }
 work-runtime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
 data-store = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
-androidx-paging = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
-app-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "appStartup" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
@@ -89,3 +92,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
