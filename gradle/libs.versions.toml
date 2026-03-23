@@ -69,7 +69,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttp3" }
 work-runtime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
-data-store = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
