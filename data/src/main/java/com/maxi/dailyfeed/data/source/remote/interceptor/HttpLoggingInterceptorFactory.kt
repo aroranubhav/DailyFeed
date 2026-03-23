@@ -2,9 +2,11 @@ package com.maxi.dailyfeed.data.source.remote.interceptor
 
 import okhttp3.logging.HttpLoggingInterceptor
 
-class HttpLoggingInterceptorFactory {
+class HttpLoggingInterceptorFactory(
+    private val isDebug: Boolean
+) {
 
-    fun create(isDebug: Boolean): HttpLoggingInterceptor {
+    fun create(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor()
             .apply {
                 level = if (isDebug) {
