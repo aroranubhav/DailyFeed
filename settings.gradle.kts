@@ -26,3 +26,4 @@ rootProject.name = "DailyFeed"
 include(":app")
 include(":domain")
 include(":common")
+include(":data")
