@@ -9,6 +9,14 @@ class FetchArticlesUseCase @Inject constructor(
     private val repository: ArticlesRepository
 ) {
 
-    suspend operator fun invoke(forceRefresh: Boolean): Resource<List<Article>> =
-        repository.fetchAndCacheNewsArticles(forceRefresh)
+    suspend operator fun invoke(
+        forceRefresh: Boolean,
+        language: String,
+        country: String
+    ): Resource<List<Article>> =
+        repository.fetchAndCacheNewsArticles(
+            forceRefresh,
+            language,
+            country
+        )
 }
